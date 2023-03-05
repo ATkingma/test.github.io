@@ -41756,7 +41756,7 @@ a.u-link.u-text-hover-grey-90:hover {
   overflow-x: hidden;
   overflow-y: auto;
   position: fixed;
-  text-align: left;
+  text-align: right;
   top: 0;
   width: 14.5em;
   z-index: 10000;
@@ -42033,7 +42033,7 @@ a.u-link.u-text-hover-grey-90:hover {
           line-height: 3.5em;
           overflow: hidden;
           padding: 0;
-          text-align: center;
+          text-align: right;
           top: 0;
           width: 100%;
       }
