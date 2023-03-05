@@ -46,7 +46,8 @@
     width: 340px;
   }
 } .u-section-2 {
-  background-image: none;
+  background-image: url("images/dff.jpg");
+  background-position: 50% 50%;
 }
 
 .u-section-2 .u-sheet-1 {
