@@ -71,7 +71,116 @@
     </section>
     <section class="u-clearfix u-image u-section-3" id="sec-15fc" data-image-width="1980" data-image-height="1321">
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <img class="u-image u-image-default u-preserve-proportions u-image-1" src="images/rr3.jpg" alt="" data-image-width="934" data-image-height="934">
+        <body>
+          <div id="unity-container" class="unity-desktop">
+            <canvas id="unity-canvas" width=960 height=600></canvas>
+            <div id="unity-loading-bar">
+              <div id="unity-logo"></div>
+              <div id="unity-progress-bar-empty">
+                <div id="unity-progress-bar-full"></div>
+              </div>
+            </div>
+            <div id="unity-warning"> </div>
+            <div id="unity-footer">
+              <div id="unity-webgl-logo"></div>
+              <div id="unity-fullscreen-button"></div>
+            </div>
+          </div>
+          <script>
+            var container = document.querySelector("#unity-container");
+            var canvas = document.querySelector("#unity-canvas");
+            var loadingBar = document.querySelector("#unity-loading-bar");
+            var progressBarFull = document.querySelector("#unity-progress-bar-full");
+            var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+            var warningBanner = document.querySelector("#unity-warning");
+      
+            // Shows a temporary message banner/ribbon for a few seconds, or
+            // a permanent error message on top of the canvas if type=='error'.
+            // If type=='warning', a yellow highlight color is used.
+            // Modify or remove this function to customize the visually presented
+            // way that non-critical warnings and error messages are presented to the
+            // user.
+            function unityShowBanner(msg, type) {
+              function updateBannerVisibility() {
+                warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+              }
+              var div = document.createElement('div');
+              div.innerHTML = msg;
+              warningBanner.appendChild(div);
+              if (type == 'error') div.style = 'background: red; padding: 10px;';
+              else {
+                if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+                setTimeout(function() {
+                  warningBanner.removeChild(div);
+                  updateBannerVisibility();
+                }, 5000);
+              }
+              updateBannerVisibility();
+            }
+      
+            var buildUrl = "Build";
+            var loaderUrl = buildUrl + "/maptest.loader.js";
+            var config = {
+              dataUrl: buildUrl + "/maptest.data",
+              frameworkUrl: buildUrl + "/maptest.framework.js",
+              codeUrl: buildUrl + "/maptest.wasm",
+              streamingAssetsUrl: "StreamingAssets",
+              companyName: "DefaultCompany",
+              productName: "Regnarok",
+              productVersion: "1.0",
+              showBanner: unityShowBanner,
+            };
+      
+            // By default Unity keeps WebGL canvas render target size matched with
+            // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+            // Set this to false if you want to decouple this synchronization from
+            // happening inside the engine, and you would instead like to size up
+            // the canvas DOM size and WebGL render target sizes yourself.
+            // config.matchWebGLToCanvasSize = false;
+      
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+              // Mobile device style: fill the whole browser client area with the game canvas:
+      
+              var meta = document.createElement('meta');
+              meta.name = 'viewport';
+              meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+              document.getElementsByTagName('head')[0].appendChild(meta);
+              container.className = "unity-mobile";
+      
+              // To lower canvas resolution on mobile devices to gain some
+              // performance, uncomment the following line:
+              // config.devicePixelRatio = 1;
+      
+              canvas.style.width = window.innerWidth + 'px';
+              canvas.style.height = window.innerHeight + 'px';
+      
+              unityShowBanner('WebGL builds are not supported on mobile devices.');
+            } else {
+              // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+      
+              canvas.style.width = "960px";
+              canvas.style.height = "600px";
+            }
+      
+            loadingBar.style.display = "block";
+      
+            var script = document.createElement("script");
+            script.src = loaderUrl;
+            script.onload = () => {
+              createUnityInstance(canvas, config, (progress) => {
+                progressBarFull.style.width = 100 * progress + "%";
+              }).then((unityInstance) => {
+                loadingBar.style.display = "none";
+                fullscreenButton.onclick = () => {
+                  unityInstance.SetFullscreen(1);
+                };
+              }).catch((message) => {
+                alert(message);
+              });
+            };
+            document.body.appendChild(script);
+          </script>
+        </body>
       </div>
     </section>
     <section class="u-clearfix u-palette-5-dark-1 u-section-4" id="sec-3a8f">
@@ -86,10 +195,158 @@
         <div class="u-accordion u-accordion-1">
           <div class="u-accordion-item u-accordion-item-1">
             <a class="active u-accordion-link u-active-palette-5-base u-border-2 u-border-grey-75 u-border-hover-palette-5-light-1 u-button-style u-hover-palette-5-base u-palette-5-base u-text-active-white u-text-body-alt-color u-text-hover-white u-accordion-link-1" id="link-3018" aria-controls="3018" aria-selected="true">
-              <span class="u-accordion-link-text">Tabblad 1</span>
+              <span class="u-accordion-link-text">Noisemap</span>
             </a>
             <div class="u-accordion-active u-accordion-pane u-container-style u-accordion-pane-1" id="3018" aria-labelledby="link-3018">
-              <div class="u-container-layout u-container-layout-1"></div>
+              <div class="u-container-layout u-container-layout-1">
+                <div style="background: #f8f8f8; overflow:auto;width:auto;border:solid rgb(48, 3, 87);border-width:.2em .2em .2em .4em;padding:0em 0em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #AA22FF; font-weight: bold">using</span> <span style="color: #0000FF; font-weight: bold">UnityEngine</span>;
+<span style="color: #AA22FF; font-weight: bold">using</span> <span style="color: #0000FF; font-weight: bold">System.Collections</span>;
+<span style="color: #AA22FF; font-weight: bold">public</span> <span style="color: #AA22FF; font-weight: bold">static</span> <span style="color: #AA22FF; font-weight: bold">class</span> <span style="color: #0000FF">Noise</span>
+{
+	<span style="color: #AA22FF; font-weight: bold">public</span> <span style="color: #AA22FF; font-weight: bold">static</span> <span style="color: #00BB00; font-weight: bold">float</span>[,] GenerateNoiseMap(<span style="color: #00BB00; font-weight: bold">int</span> mapWidth, <span style="color: #00BB00; font-weight: bold">int</span> mapHeight,<span style="color: #00BB00; font-weight: bold">int</span> seed, <span style="color: #00BB00; font-weight: bold">float</span> scale , <span style="color: #00BB00; font-weight: bold">int</span> octaves,<span style="color: #00BB00; font-weight: bold">float</span> persistance,<span style="color: #00BB00; font-weight: bold">float</span> lacunary,Vector2 offset)
+	{
+		<span style="color: #00BB00; font-weight: bold">float</span>[,] noiseMap = <span style="color: #AA22FF; font-weight: bold">new</span> <span style="color: #00BB00; font-weight: bold">float</span>[mapWidth, mapHeight];
+
+		System.Random prng = <span style="color: #AA22FF; font-weight: bold">new</span> System.Random(seed);
+		Vector2[] octaveOffsets = <span style="color: #AA22FF; font-weight: bold">new</span> Vector2[octaves];
+
+		<span style="color: #AA22FF; font-weight: bold">for</span>(<span style="color: #00BB00; font-weight: bold">int</span> i =<span style="color: #666666">0</span>;i&lt; octaves; i++)
+		{
+			<span style="color: #00BB00; font-weight: bold">float</span> offsetX = prng.Next(-<span style="color: #666666">100000</span>,<span style="color: #666666">100000</span>)+ offset.x;
+			<span style="color: #00BB00; font-weight: bold">float</span> offsetY = prng.Next(-<span style="color: #666666">100000</span>, <span style="color: #666666">100000</span>)+ offset.y;
+			octaveOffsets[i] = <span style="color: #AA22FF; font-weight: bold">new</span> Vector2(offsetX, offsetY);
+		}
+
+		<span style="color: #AA22FF; font-weight: bold">if</span> (scale &lt;= <span style="color: #666666">0</span>)
+		{
+			scale = <span style="color: #666666">0.0001f</span>;
+		}
+		<span style="color: #00BB00; font-weight: bold">float</span> maxNoiseHeight = <span style="color: #00BB00; font-weight: bold">float</span>.MinValue;
+		<span style="color: #00BB00; font-weight: bold">float</span> minNoiseHeight = <span style="color: #00BB00; font-weight: bold">float</span>.MaxValue;
+
+		<span style="color: #00BB00; font-weight: bold">float</span> halfWidth = mapWidth / <span style="color: #666666">2f</span>;
+		<span style="color: #00BB00; font-weight: bold">float</span> halfHeight = mapHeight / <span style="color: #666666">2f</span>;
+
+		<span style="color: #AA22FF; font-weight: bold">for</span> (<span style="color: #00BB00; font-weight: bold">int</span> y = <span style="color: #666666">0</span>; y &lt; mapHeight; y++)
+		{
+			<span style="color: #AA22FF; font-weight: bold">for</span> (<span style="color: #00BB00; font-weight: bold">int</span> x = <span style="color: #666666">0</span>; x &lt; mapWidth; x++)
+			{
+				<span style="color: #00BB00; font-weight: bold">float</span> amplitudes = <span style="color: #666666">1</span>;
+				<span style="color: #00BB00; font-weight: bold">float</span> frequency = <span style="color: #666666">1</span>;
+				<span style="color: #00BB00; font-weight: bold">float</span> noiseHeight = <span style="color: #666666">0</span>;
+
+				<span style="color: #AA22FF; font-weight: bold">for</span> (<span style="color: #00BB00; font-weight: bold">int</span> i = <span style="color: #666666">0</span>; i &lt; octaves; i++)
+				{
+					<span style="color: #00BB00; font-weight: bold">float</span> sampleX = (x-halfWidth) / scale*frequency + octaveOffsets[i].x;
+					<span style="color: #00BB00; font-weight: bold">float</span> sampleY = (y - halfHeight) / scale*frequency + octaveOffsets[i].y;
+
+					<span style="color: #00BB00; font-weight: bold">float</span> perlinValue = Mathf.PerlinNoise(sampleX, sampleY)*<span style="color: #666666">2</span>-<span style="color: #666666">1</span>;
+					noiseHeight += perlinValue * amplitudes;
+
+					amplitudes *= persistance;
+					frequency *= lacunary;
+				}
+
+
+				<span style="color: #AA22FF; font-weight: bold">if</span> (noiseHeight &gt; maxNoiseHeight)
+				{
+					maxNoiseHeight = noiseHeight;
+				}
+				<span style="color: #AA22FF; font-weight: bold">else</span> <span style="color: #00A000">if</span> (noiseHeight &lt; minNoiseHeight)
+				{
+					minNoiseHeight = noiseHeight;
+				}
+
+				noiseMap[x, y] = noiseHeight;
+			}
+		}
+
+		<span style="color: #AA22FF; font-weight: bold">for</span> (<span style="color: #00BB00; font-weight: bold">int</span> y = <span style="color: #666666">0</span>; y &lt; mapHeight; y++)
+		{
+			<span style="color: #AA22FF; font-weight: bold">for</span> (<span style="color: #00BB00; font-weight: bold">int</span> x = <span style="color: #666666">0</span>; x &lt; mapWidth; x++)
+			{
+				noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
+			}
+		}
+
+		<span style="color: #AA22FF; font-weight: bold">return</span> noiseMap;
+	}
+}
+</pre></td></tr></table></div>
+
+              </div>
             </div>
           </div>
           <div class="u-accordion-item u-accordion-item-2">
